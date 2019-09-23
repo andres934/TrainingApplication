@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TrainingApp</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="item_poster_description">Poster</string>
+    <string name="txt_title">Title:</string>
+    <string name="txt_year">Year:</string>
+    <string name="txt_rated">Rated:</string>
+    <string name="search_title">Search Content</string>
+    <string name="search_hint">Avengers infin....</string>
+    <string name="full_image_poster">FullImagePoster</string>
+    <string name="txt_released">Released</string>
+    <string name="txt_runtime">Duration:</string>
+    <string name="txt_genre">Genre:</string>
+    <string name="txt_actors">Actors:</string>
+    <string name="txt_plot">Plot:</string>
+</resources>
