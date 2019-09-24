@@ -1,15 +1,12 @@
 package com.example.trainingapp
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
-import com.example.trainingapp.models.DataModel
+import com.example.trainingapp.repositories.DataRepository
 import com.example.trainingapp.view.MainActivity
 import com.example.trainingapp.viewmodel.DataViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
@@ -18,38 +15,26 @@ import org.mockito.MockitoAnnotations
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class MainActivityUnitTest {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
     private lateinit var activity: MainActivity
 
+    private lateinit var repository: DataRepository
+
     private lateinit var viewModel: DataViewModel
 /*
     Required to test navigation components
     private val mockNavController = mock(NavController::class.java)*/
 
-    private val listObserver: Observer<List<DataModel>> = mock()
-    private val itemObserver: Observer<DataModel> = mock()
-
-    @Captor
-    private lateinit var lstCaptor: ArgumentCaptor<List<DataModel>>
-
-    @Captor
-    private lateinit var itemCaptor: ArgumentCaptor<DataModel>
-
     @Before
     fun setupEnviroment() {
         MockitoAnnotations.initMocks(this)
-        activity = mock(MainActivity::class.java)
-        viewModel = DataViewModel()
-        viewModel.getContentList()?.apply {
-            observeForever(listObserver)
-        } ?: println("Content List is null")
-        viewModel.getContentItem()?.apply {
-            observeForever(itemObserver)
-        } ?: println("Content Item is null")
+        activity = mock()
+        repository = mock()
+        viewModel = spy(DataViewModel::class.java)
     }
 
     @Test
@@ -59,33 +44,25 @@ class ExampleUnitTest {
 
     @Test
     fun searchWithEmptyQuery() {
-
         activity.searchQuery("")
 
-        verify(activity).searchQuery("")
-
-        verify(listObserver, times(1)).onChanged(lstCaptor.capture())
+        verify(activity, times(1)).searchQuery("")
     }
 
     @Test
     fun searchWithNullQuery() {
         activity.searchQuery(null)
 
-        verify(activity).searchQuery(null)
-
-        verify(listObserver, times(1)).onChanged(lstCaptor.capture())
+        verify(activity, times(1)).searchQuery(null)
     }
 
     @Test
     fun searchWithContentQuery() {
         activity.searchQuery("Bruce")
 
-        verify(activity).searchQuery("Bruce")
+        verify(activity, times(1)).searchQuery("Bruce")
 
-        viewModel.getContentByName("Bruce")
-
-        verify(listObserver, times(1)).onChanged(lstCaptor.capture())
-        println("ListObserver: ${lstCaptor.value}")
+        //verify(repository).getContentByName("Bruce")
     }
 
     /*@Test
@@ -104,11 +81,5 @@ class ExampleUnitTest {
 
         verify(mockNavController).navigate(directions)
     }*/
-
-    @Test
-    fun testVerifyItemUpdate() {
-        verify(itemObserver, times(1)).onChanged(itemCaptor.capture())
-        println("ItemObserver: ${itemCaptor.value}")
-    }
 
 }
