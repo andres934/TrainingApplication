@@ -105,9 +105,8 @@ var movieTemplateAvengers: DataModel = DataModel(
 )
 
 //Lists
-var emptyList: List<DataModel> = emptyList()
+var emptyListTemplate: List<DataModel> = emptyList()
 var moviesLstDefaultTemplate: List<DataModel> = listOf(
-    movieTemplateEmpty,
     movieTemplateBruce,
     movieTemplateAvengers
 )

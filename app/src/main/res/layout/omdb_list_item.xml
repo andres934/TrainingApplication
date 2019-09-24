@@ -107,7 +107,7 @@
             tools:text="2007" />
 
         <TextView
-            android:id="@+id/tvRatedContent"
+            android:id="@+id/tvTypeContent"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="7"
@@ -117,17 +117,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline14"
             app:layout_constraintTop_toTopOf="@+id/guideline3"
-            tools:text="PG-13" />
+            tools:text="Movie" />
 
         <TextView
-            android:id="@+id/tvRated"
+            android:id="@+id/tvType"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_weight="3"
             android:gravity="center|start"
-            android:text="@string/txt_rated"
+            android:text="@string/txt_type"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline14"
             app:layout_constraintStart_toStartOf="@+id/guideline"

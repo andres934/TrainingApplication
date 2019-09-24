@@ -8,12 +8,12 @@ import android.view.Menu
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProviders
 import com.example.trainingapp.R
-import com.example.trainingapp.repositories.DataRepository
 import com.example.trainingapp.viewmodel.DataViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var dataViewModel: DataViewModel
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
+            searchView = this
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
-
             setOnQueryTextListener(object: SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     searchQuery(query)
@@ -51,6 +51,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         return true
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        closeSearchView()
+    }
+
+    private fun closeSearchView() {
+        if (!searchView.isIconified) {
+            searchView.isIconified = true
+            supportActionBar?.collapseActionView()
+        }
     }
 
     fun searchQuery(query: String?) {

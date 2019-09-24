@@ -15,4 +15,5 @@
     <string name="txt_genre">Genre:</string>
     <string name="txt_actors">Actors:</string>
     <string name="txt_plot">Plot:</string>
+    <string name="txt_type">Type:</string>
 </resources>

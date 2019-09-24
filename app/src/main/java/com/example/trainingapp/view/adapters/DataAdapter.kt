@@ -25,7 +25,7 @@ class DataAdapter(dataList: List<DataModel>, clickListener: AdapterItemClickList
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         fun bind(item: DataModel, listener: AdapterItemClickListener?) {
             itemView.tvTitleContent.text = item.title
-            itemView.tvRatedContent.text = item.rated
+            itemView.tvTypeContent.text = item.type
             itemView.tvYearContent.text = item.year
             try {
                 Picasso.get()

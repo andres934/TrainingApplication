@@ -1,12 +1,10 @@
-package com.example.trainingapp
+package com.example.trainingapp.view
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.trainingapp.repositories.DataRepository
-import com.example.trainingapp.view.MainActivity
-import com.example.trainingapp.viewmodel.DataViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
@@ -20,11 +18,8 @@ class MainActivityUnitTest {
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
+    @Mock
     private lateinit var activity: MainActivity
-
-    private lateinit var repository: DataRepository
-
-    private lateinit var viewModel: DataViewModel
 /*
     Required to test navigation components
     private val mockNavController = mock(NavController::class.java)*/
@@ -32,9 +27,6 @@ class MainActivityUnitTest {
     @Before
     fun setupEnviroment() {
         MockitoAnnotations.initMocks(this)
-        activity = mock()
-        repository = mock()
-        viewModel = spy(DataViewModel::class.java)
     }
 
     @Test

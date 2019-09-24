@@ -6,7 +6,7 @@ import com.example.trainingapp.models.DataModel
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-object DataRepository : CoroutineScope {
+object DataRepositoryImpl : CoroutineScope, DataRepository {
 
     private var item = MutableLiveData<DataModel>().apply { postValue(
         DataModel()
@@ -20,10 +20,10 @@ object DataRepository : CoroutineScope {
         job = SupervisorJob()
     }
 
-    fun getListData() = listData
-    fun getItem() = item
+    override fun getListData() = listData
+    override fun getItem() = item
 
-    fun getContentByName(name: String) {
+    override fun getContentByName(name: String) {
         launch {
             val result = RetrofitHelper().getContentByNameService(name)
             if (result.isNotEmpty()) {
@@ -32,22 +32,19 @@ object DataRepository : CoroutineScope {
         }
     }
 
-    fun getContentById(id: String) {
+    override fun getContentById(id: String) {
         launch {
             val result = RetrofitHelper().getContentByIdService(id)
             item.postValue(result)
         }
     }
 
-    fun addManualListData(data: List<DataModel>) {
-        launch {
-            listData.postValue(data)
-        }
+    override fun postManualList(data: List<DataModel>) {
+        listData.postValue(data)
     }
 
-    fun addManualItemData(data: DataModel) {
-        launch {
-            item.postValue(data)
-        }
+    override fun postManualItem(data: DataModel) {
+        item.postValue(data)
     }
+
 }

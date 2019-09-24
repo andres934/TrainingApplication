@@ -5,7 +5,5 @@ import com.example.trainingapp.interfaces.AdapterItemClickListener
 
 open class BaseFragment: Fragment(), AdapterItemClickListener {
 
-    override fun onItemClickListener(idContent: String) {
-
-    }
+    override fun onItemClickListener(idContent: String) {}
 }
