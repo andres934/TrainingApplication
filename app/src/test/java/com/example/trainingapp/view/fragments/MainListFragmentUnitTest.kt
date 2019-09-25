@@ -16,9 +16,6 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class MainListFragmentUnitTest {
 
-    @get:Rule
-    val rule = InstantTaskExecutorRule()
-
     @Mock
     private lateinit var fragment: MainListFragment
 
