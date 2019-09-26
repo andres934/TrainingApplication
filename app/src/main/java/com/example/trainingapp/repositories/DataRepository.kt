@@ -2,13 +2,13 @@ package com.example.trainingapp.repositories
 
 import androidx.lifecycle.MutableLiveData
 import com.example.trainingapp.models.DataModel
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
 
+@Module
 interface DataRepository {
 
-    fun getListData(): MutableLiveData<List<DataModel>>
-    fun getItem(): MutableLiveData<DataModel>
-    fun getContentByName(name: String)
-    fun getContentById(id: String)
-    fun postManualList(data: List<DataModel>)
-    fun postManualItem(data: DataModel)
+    suspend fun getContentByName(name: String): List<DataModel>?
+    suspend fun getContentById(id: String): DataModel?
 }
