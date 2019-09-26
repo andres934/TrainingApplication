@@ -4,7 +4,6 @@ package com.example.trainingapp.view.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -12,9 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.trainingapp.R
-import com.example.trainingapp.view.adapters.DataAdapter
 import com.example.trainingapp.fragments.DetailsFragmentBinding
 import com.example.trainingapp.models.DataModel
+import com.example.trainingapp.view.adapters.DataAdapter
 import com.example.trainingapp.viewmodel.DataViewModel
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
@@ -61,11 +60,6 @@ class DetailsFragment : Fragment() {
             auxBinding?.details = data
         })
 
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val item = menu.findItem(R.id.search)
-        item.isVisible = true
     }
 
     override fun onDetach() {

@@ -8,6 +8,8 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'kotlin-allopen'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -28,19 +30,22 @@ android {
     dataBinding {
         enabled = true
     }
+    allOpen {
+        annotation('com.example.trainingapp.tools.Mockable')
+    }
 }
 
 dependencies {
     def lifecycle_version = "2.1.0"
     def nav_version = "2.1.0"
     def ktx_version = "1.1.0"
-    def fragment_version = "1.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
     implementation "androidx.core:core-ktx:$ktx_version"
+    implementation 'androidx.test:core:1.2.0'
     implementation "androidx.fragment:fragment-ktx:$ktx_version"
 
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
@@ -60,15 +65,20 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    api 'com.google.dagger:dagger:2.24'
+    kapt 'com.google.dagger:dagger-compiler:2.24'
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     debugImplementation 'androidx.fragment:fragment-testing:1.1.0'
-    testImplementation 'androidx.fragment:fragment-testing:1.1.0'
     testImplementation 'junit:junit:4.12'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     testImplementation 'org.mockito:mockito-core:2.19.0'
+    androidTestImplementation 'org.mockito:mockito-android:2.19.0'
+    androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
     androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation "com.android.support:support-annotations:28.0.0"

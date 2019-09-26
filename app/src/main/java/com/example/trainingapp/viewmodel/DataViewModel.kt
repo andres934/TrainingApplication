@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModel
 import com.example.trainingapp.models.DataModel
 import com.example.trainingapp.repositories.DataRepository
 import com.example.trainingapp.repositories.DataRepositoryImpl
+import com.example.trainingapp.tools.Mockable
+import javax.inject.Inject
 
-class DataViewModel: ViewModel() {
+@Mockable
+class DataViewModel @Inject constructor(): ViewModel() {
 
     private var itemContent: LiveData<DataModel>? = null
     private var lstContent: LiveData<List<DataModel>>? = null
@@ -15,7 +18,11 @@ class DataViewModel: ViewModel() {
     init {
         itemContent = repository.getItem()
         lstContent = repository.getListData()
-        getContentByName("Avengers")//Option by default, cannot list recent content
+        getDefaultData()//Option by default, cannot list recent content
+    }
+
+    private fun getDefaultData() {
+        repository.getContentByName("Jumanji")
     }
 
     fun getContentByName(name: String) {

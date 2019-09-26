@@ -1,11 +1,8 @@
 package com.example.trainingapp.view.fragments
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.trainingapp.emptyListTemplate
-import com.example.trainingapp.interfaces.AdapterItemClickListener
 import com.example.trainingapp.moviesLstDefaultTemplate
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock

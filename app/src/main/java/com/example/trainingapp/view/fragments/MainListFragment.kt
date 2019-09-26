@@ -3,10 +3,8 @@ package com.example.trainingapp.view.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -54,11 +52,6 @@ class MainListFragment : BaseFragment() {
 
     override fun onItemClickListener(idContent: String) {
         handleItemClick(idContent)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val item = menu.findItem(R.id.search)
-        item.isVisible = true
     }
 
     //End Override methods

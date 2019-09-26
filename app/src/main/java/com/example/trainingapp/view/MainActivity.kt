@@ -2,24 +2,36 @@ package com.example.trainingapp.view
 
 import android.app.SearchManager
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import androidx.annotation.VisibleForTesting
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProviders
 import com.example.trainingapp.R
+import com.example.trainingapp.interfaces.DaggerDataViewModelFactoryComponent
 import com.example.trainingapp.viewmodel.DataViewModel
+import com.example.trainingapp.viewmodel.DataViewModelFactory
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var dataViewModel: DataViewModel
+    @Inject
+    lateinit var vmFactory: DataViewModelFactory<DataViewModel>
+
+    lateinit var dataViewModel: DataViewModel
+
     private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        dataViewModel = ViewModelProviders.of(this).get(DataViewModel::class.java)
+        val component = DaggerDataViewModelFactoryComponent.create()
+        component.inject(this)
+
+        dataViewModel = ViewModelProviders.of(this, vmFactory)[DataViewModel::class.java]
+
         /*
         Using Navigation component, so fragment transactions are disabled
 
@@ -35,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.main_menu, menu)
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
+        (menu?.findItem(R.id.searchBar)?.actionView as SearchView).apply {
             searchView = this
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             setOnQueryTextListener(object: SearchView.OnQueryTextListener {
@@ -58,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         closeSearchView()
     }
 
+    @VisibleForTesting
     private fun closeSearchView() {
         if (!searchView.isIconified) {
             searchView.isIconified = true

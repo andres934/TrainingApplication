@@ -53,8 +53,6 @@ class MainActivityUnitTest {
         activity.searchQuery("Bruce")
 
         verify(activity, times(1)).searchQuery("Bruce")
-
-        //verify(repository).getContentByName("Bruce")
     }
 
     /*@Test
