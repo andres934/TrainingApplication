@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trainingapp.models.DataModel
-import com.example.trainingapp.repositories.DataRepository
 import com.example.trainingapp.repositories.DataRepositoryImpl
 import com.example.trainingapp.tools.Mockable
 import kotlinx.coroutines.*
@@ -13,7 +12,7 @@ import kotlin.coroutines.CoroutineContext
 
 @Mockable
 class DataViewModel @Inject constructor(
-    private var repository: DataRepository
+    private var repository: DataRepositoryImpl
 ): CoroutineScope, ViewModel() {
 
     private var itemContent = MutableLiveData<DataModel>().apply {
@@ -38,30 +37,26 @@ class DataViewModel @Inject constructor(
     private fun getDefaultData() {
         launch {
             val result = repository.getContentByName("Jumanji")
-            if (!result.isNullOrEmpty()) {
-                getContentList().postValue(result)
-            }
+            lstContent.postValue(result)
         }
     }
 
     fun getContentByName(name: String) {
         launch {
             val result = repository.getContentByName(name)
-            if (!result.isNullOrEmpty()) {
-                getContentList().postValue(result)
-            }
+            lstContent.postValue(result)
         }
     }
 
     fun getContentById(id: String) {
         launch {
             val result = repository.getContentById(id)
-            getContentItem().postValue(result)
+            itemContent.postValue(result)
         }
     }
 
-    fun getContentList() = lstContent
+    fun getContentList(): LiveData<List<DataModel>> = lstContent
 
-    fun getContentItem() = itemContent
+    fun getContentItem(): LiveData<DataModel> = itemContent
 
 }

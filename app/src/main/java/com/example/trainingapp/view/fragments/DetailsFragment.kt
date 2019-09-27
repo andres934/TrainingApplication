@@ -13,16 +13,22 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.trainingapp.R
 import com.example.trainingapp.fragments.DetailsFragmentBinding
 import com.example.trainingapp.models.DataModel
+import com.example.trainingapp.tools.BaseFragment
 import com.example.trainingapp.view.adapters.DataAdapter
 import com.example.trainingapp.viewmodel.DataViewModel
+import com.example.trainingapp.viewmodel.DataViewModelFactory
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
-class DetailsFragment : Fragment() {
+class DetailsFragment : BaseFragment() {
+
+    @Inject
+    lateinit var factory: DataViewModelFactory<DataViewModel>
 
     private lateinit var dataViewModel: DataViewModel
 
@@ -31,9 +37,6 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         //Get the id from bundle to get the data before it loads the view
-        dataViewModel = ViewModelProviders.of(this).get(DataViewModel::class.java)
-
-        updateCurrentItemById(arguments)
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_details, container, false)
@@ -45,7 +48,9 @@ class DetailsFragment : Fragment() {
         //As the repository is an object, it will save the last item downloaded
         //At this point it should already have the passed data for the item
 
-        dataViewModel.getContentItem()?.observe(this, Observer<DataModel> { data ->
+        dataViewModel = ViewModelProviders.of(this, factory)[DataViewModel::class.java]
+
+        dataViewModel.getContentItem().observe(this, Observer<DataModel> { data ->
             try {
                 Picasso.get()
                     .load(data.poster)
@@ -60,11 +65,8 @@ class DetailsFragment : Fragment() {
             auxBinding?.details = data
         })
 
-    }
+        updateCurrentItemById(arguments)
 
-    override fun onDetach() {
-        dataViewModel.postManualItem()
-        super.onDetach()
     }
 
     fun updateCurrentItemById(args: Bundle?) {

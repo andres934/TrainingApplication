@@ -12,11 +12,13 @@ import com.example.trainingapp.repositories.DataRepositoryImpl
 import com.example.trainingapp.view.adapters.DataAdapter
 import com.example.trainingapp.viewmodel.DataViewModel
 import com.example.trainingapp.viewmodel.DataViewModelFactory
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runners.MethodSorters
+import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
@@ -25,26 +27,31 @@ class MainActivityEspressoTest {
 
     @Rule
     @JvmField
-    var activityRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
+    var activityRule: ActivityTestRule<MainActivity> = ActivityTestRule(
+        MainActivity::class.java)
 
-    private var viewModel: DataViewModel = mock()
+    private lateinit var viewModel: DataViewModel
 
-    private val factory = DataViewModelFactory(viewModel)
+    @Mock
+    private lateinit var repository: DataRepositoryImpl
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        activityRule.activity.vmFactory = factory
+        setUpMockedData()
 
-        `when`(viewModel.getContentByName("Bruce")).then {
-            println("WHEN CONTENT NAME BRUCE IS SEARCH IS ACTIVATING")
-            DataRepositoryImpl.postManualList(moviesLstDefaultTemplate)
-            //viewModel.postManualList(moviesLstDefaultTemplate)
+        viewModel = DataViewModel(repository)
+        activityRule.activity.vmFactory = DataViewModelFactory(viewModel)
+    }
+
+    fun setUpMockedData() {
+        runBlocking {
+            `when`(repository.getContentByName("Bruce")).thenReturn(moviesLstDefaultTemplate)
         }
 
-        `when`(viewModel.getContentById("tt4154796")).then {
-            viewModel.postManualItem(movieTemplateAvengers)
+        runBlocking {
+            `when`(repository.getContentById("tt4154796")).thenReturn(movieTemplateAvengers)
         }
     }
 
@@ -76,8 +83,8 @@ class MainActivityEspressoTest {
 
         submitSearchAndCloseKeyboard()
 
-        /*onView(withId(R.id.recycler))
-            .check(matches(Tools.recyclerViewSizeMatcher(moviesLstDefaultTemplate.size)))*/
+        onView(withId(R.id.recycler))
+            .check(matches(Tools.recyclerViewSizeMatcher(moviesLstDefaultTemplate.size)))
 
     }
 

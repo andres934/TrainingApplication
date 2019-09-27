@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,17 +16,21 @@ import com.example.trainingapp.models.DataModel
 import com.example.trainingapp.tools.BaseFragment
 import com.example.trainingapp.view.adapters.DataAdapter
 import com.example.trainingapp.viewmodel.DataViewModel
+import com.example.trainingapp.viewmodel.DataViewModelFactory
 import kotlinx.android.synthetic.main.fragment_main_list.*
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
 class MainListFragment : BaseFragment() {
 
-    @VisibleForTesting
     private val adapter by lazy {
         DataAdapter(emptyList(), this)
     }
+
+    @Inject
+    lateinit var factory: DataViewModelFactory<DataViewModel>
 
     private lateinit var dataViewModel: DataViewModel
 
@@ -35,6 +38,10 @@ class MainListFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        activity?.apply {
+            dataViewModel = ViewModelProviders.of(this, factory)[DataViewModel::class.java]
+        }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main_list, container, false)
     }
@@ -43,9 +50,7 @@ class MainListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initRecycler()
-
-        dataViewModel = ViewModelProviders.of(this).get(DataViewModel::class.java)
-        dataViewModel.getContentList()?.observe(this, Observer<List<DataModel>> {
+        dataViewModel.getContentList().observe(this, Observer<List<DataModel>> {
             updateAdapterItems(it)
         })
     }

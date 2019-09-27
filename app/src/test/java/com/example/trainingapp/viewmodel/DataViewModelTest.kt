@@ -7,22 +7,23 @@ import com.example.trainingapp.models.DataModel
 import com.example.trainingapp.movieTemplateBruce
 import com.example.trainingapp.moviesLstDefaultTemplate
 import com.example.trainingapp.repositories.DataRepositoryImpl
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import org.mockito.Spy
 
 class DataViewModelTest {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
-    @Spy
     private lateinit var viewModel: DataViewModel
+
+    @Mock
+    private lateinit var repository: DataRepositoryImpl
 
     private val itemObserver: Observer<DataModel> = mock()
     private val lstObserver: Observer<List<DataModel>> = mock()
@@ -31,53 +32,42 @@ class DataViewModelTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        viewModel.getContentList()?.observeForever(lstObserver)
-        viewModel.getContentItem()?.observeForever(itemObserver)
+        setupMockedData()
+
+        viewModel = DataViewModel(repository)
+
+        viewModel.getContentList().observeForever(lstObserver)
+        viewModel.getContentItem().observeForever(itemObserver)
 
     }
 
+    private fun setupMockedData() = runBlocking {
+        `when`(repository.getContentByName("")).thenReturn(moviesLstDefaultTemplate)
+        `when`(repository.getContentById("")).thenReturn(movieTemplateBruce)
+    }
+
     @Test
-    fun getContentByNameMocked() {
-        `when`(viewModel.getContentByName("")).then {
-            DataRepositoryImpl.postManualList(moviesLstDefaultTemplate)
+    fun getContentByNameMocked() = runBlocking {
+
+            viewModel.getContentByName("")
+
+            verify(repository).getContentByName("")
+
+            verify(lstObserver).onChanged(moviesLstDefaultTemplate)
+
+            return@runBlocking
         }
 
-        viewModel.getContentByName("")
-
-        verify(viewModel, times(1)).getContentByName("")
-
-        verify(lstObserver).onChanged(moviesLstDefaultTemplate)
-
-        viewModel.getContentList()?.let {
-            assertEquals(it.value, moviesLstDefaultTemplate)
-        } ?: println("ViewModel List is null")
-    }
-
     @Test
-    fun getContentByIdMocked() {
-        `when`(viewModel.getContentById("")).then {
-            DataRepositoryImpl.postManualItem(movieTemplateBruce)
+    fun getContentByIdMocked() = runBlocking {
+
+            viewModel.getContentById("")
+
+            verify(repository).getContentById("")
+
+            verify(itemObserver).onChanged(movieTemplateBruce)
+
+            return@runBlocking
         }
 
-        viewModel.getContentById("")
-
-        verify(viewModel, times(1)).getContentById("")
-
-        verify(itemObserver).onChanged(movieTemplateBruce)
-
-        viewModel.getContentItem()?.let {
-            assertEquals(it.value, movieTemplateBruce)
-        } ?: println("ViewModel Item is null")
-
-    }
-
-    @Test
-    fun getContentList() {
-        assertNotNull(viewModel.getContentList())
-    }
-
-    @Test
-    fun getContentItem() {
-        assertNotNull(viewModel.getContentItem())
-    }
 }

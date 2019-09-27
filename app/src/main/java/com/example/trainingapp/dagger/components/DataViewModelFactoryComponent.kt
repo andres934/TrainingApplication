@@ -1,4 +1,4 @@
-package com.example.trainingapp.interfaces
+package com.example.trainingapp.dagger.components
 
 import com.example.trainingapp.view.MainActivity
 import com.example.trainingapp.viewmodel.DataViewModel

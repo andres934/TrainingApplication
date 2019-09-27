@@ -12,4 +12,6 @@ class DataViewModelFactory<VM: ViewModel> @Inject constructor(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return viewModel as T
     }
+
+    fun create(viewModel: DataViewModel) = viewModel
 }

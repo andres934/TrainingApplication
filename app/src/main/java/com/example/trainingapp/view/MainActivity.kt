@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProviders
 import com.example.trainingapp.R
-import com.example.trainingapp.interfaces.DaggerDataViewModelFactoryComponent
 import com.example.trainingapp.viewmodel.DataViewModel
 import com.example.trainingapp.viewmodel.DataViewModelFactory
+import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -24,11 +24,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val component = DaggerDataViewModelFactoryComponent.create()
-        component.inject(this)
+        /*val component = DaggerDataViewModelFactoryComponent.create()
+        component.inject(this)*/
 
         dataViewModel = ViewModelProviders.of(this, vmFactory)[DataViewModel::class.java]
 

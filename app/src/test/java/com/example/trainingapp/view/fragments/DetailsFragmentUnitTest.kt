@@ -6,7 +6,9 @@ import androidx.lifecycle.Observer
 import com.example.trainingapp.mock
 import com.example.trainingapp.models.DataModel
 import com.example.trainingapp.movieLstTemplateBruce
+import com.example.trainingapp.repositories.DataRepositoryImpl
 import com.example.trainingapp.viewmodel.DataViewModel
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -14,7 +16,6 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import org.mockito.Spy
 
 class DetailsFragmentUnitTest {
 
@@ -24,8 +25,10 @@ class DetailsFragmentUnitTest {
     @Mock
     private lateinit var fragment: DetailsFragment
 
-    @Spy
     private lateinit var viewModel: DataViewModel
+
+    @Mock
+    private lateinit var repository: DataRepositoryImpl
 
     private val itemObserver: Observer<DataModel> = mock()
 
@@ -33,9 +36,11 @@ class DetailsFragmentUnitTest {
     fun setupEnviroment() {
         MockitoAnnotations.initMocks(this)
 
-        viewModel.getContentItem()?.apply {
+        viewModel = DataViewModel(repository)
+
+        viewModel.getContentItem().apply {
             observeForever(itemObserver)
-        } ?: println("Content item is null")
+        }
     }
 
     @Test
@@ -62,17 +67,17 @@ class DetailsFragmentUnitTest {
         fragment.updateCurrentItemById(bundle)
         verify(fragment, times(1)).updateCurrentItemById(bundle)
 
-        `when`(viewModel.getContentById("tt0315327")).then {
-            viewModel.postManualItem(movieLstTemplateBruce)
+        runBlocking {
+            `when`(repository.getContentById("tt0315327")).thenReturn(movieLstTemplateBruce)
         }
 
         viewModel.getContentById("tt0315327")
+
         verify(viewModel, times(1)).getContentById("tt0315327")
+
 
         verify(itemObserver, times(1)).onChanged(movieLstTemplateBruce)
 
-        viewModel.getContentItem()?.let {
-            assertEquals(movieLstTemplateBruce, it.value)
-        }
+        assertEquals(movieLstTemplateBruce, viewModel.getContentItem().value)
     }
 }
